@@ -33,44 +33,48 @@ export class AuthService {
       throw new UnauthorizedException(`the email ${email} already exist`);
     }
 
-    const save = await this.userRepository.save(create);
+    const user = await this.userRepository.save(create);
 
     const payload = {
-      id: save.id,
-      username: save.username,
-      email: save.email,
-      roles: save.roles,
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      roles: user.roles,
     };
 
-    delete save.password;
+    delete user.password;
 
     return {
-      ...save,
-      access_token: await this.GeneratedToken(payload),
+      userData: {
+        user,
+        access_token: await this.GeneratedToken(payload),
+      },
     };
   }
 
   async LoginUser(loginUserDto: LoginUserDto) {
     const { email, password } = loginUserDto;
 
-    const findEmail = await this.userRepository.findOneBy({ email });
-    if (!findEmail) {
+    const user = await this.userRepository.findOneBy({ email });
+    if (!user) {
       throw new UnauthorizedException(`the email ${email} not exist`);
     }
 
-    const comparePassword = bcrypt.compareSync(password, findEmail.password);
+    const comparePassword = bcrypt.compareSync(password, user.password);
     if (!comparePassword) {
       throw new UnauthorizedException('password dont match');
     }
     const payload = {
-      id: findEmail.id,
-      username: findEmail.username,
-      email: findEmail.email,
-      roles: findEmail.roles,
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      roles: user.roles,
     };
     return {
-      findEmail,
-      access_token: await this.GeneratedToken(payload),
+      userData: {
+        user,
+        access_token: await this.GeneratedToken(payload),
+      },
     };
   }
 }
