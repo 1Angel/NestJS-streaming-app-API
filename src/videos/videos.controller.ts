@@ -10,6 +10,7 @@ import {
   UseInterceptors,
   UseGuards,
   ClassSerializerInterceptor,
+  Header,
 } from '@nestjs/common';
 import { VideosService } from './videos.service';
 import { CreateVideoDto } from './Dtos/CreateVideoDto.dto';
@@ -56,13 +57,24 @@ export class VideosController {
     return this.videosService.VideoById(id);
   }
 
-  @UseGuards(AuthGuard)
-  @Get('stream/:name')
-  StreamVideo(
-    @Param('name') name: string,
+  // //@UseGuards(AuthGuard)
+  // @Get('stream/:name')
+  // StreamVideo(
+  //   @Param('name') name: string,
+  //   @Res() res: Response,
+  //   @Req() req: Request,
+  // ) {
+  //   return this.videosService.StreamVideo(name, res, req);
+  // }
+
+  @Get('streamss/:id')
+  @Header('Accept-Ranges', 'bytes')
+  @Header('Content-Type', 'video/mp4')
+  StreamReal(
+    @Param('id') id: number,
     @Res() res: Response,
     @Req() req: Request,
   ) {
-    return this.videosService.StreamVideo(name, res, req);
+    return this.videosService.StreamVideos(id, res, req);
   }
 }

@@ -1,4 +1,13 @@
-import { Body, ClassSerializerInterceptor, Controller, Get, Post, Request, UseGuards, UseInterceptors } from '@nestjs/common';
+import {
+  Body,
+  ClassSerializerInterceptor,
+  Controller,
+  Get,
+  Post,
+  Request,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './Dtos/CreateUser.dto';
 import { LoginUserDto } from './Dtos/LoginUserDto.dto';
@@ -10,7 +19,6 @@ import { Role } from './entities/Roles.enum';
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
-
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Post('create')
@@ -35,7 +43,7 @@ export class AuthController {
   @Roles(Role.Admin)
   @Get('rolles')
   RolesXD(@Request() req) {
-    console.log(req.user)
+    console.log(req.user);
     return 'hola admin';
   }
 }
