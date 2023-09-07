@@ -6,18 +6,33 @@ import { Video } from './entities/videos.entity';
 import { CreateVideoDto } from './Dtos/CreateVideoDto.dto';
 import { join } from 'path';
 import { Request, Response } from 'express';
+import { Course } from 'src/courses/entity/Courses.entity';
 
 @Injectable()
 export class VideosService {
   constructor(
     @InjectRepository(Video)
     private videoRepository: Repository<Video>,
+
+    @InjectRepository(Course)
+    readonly courseRepository: Repository<Course>,
   ) {}
 
-  async CreateVideo(file: Express.Multer.File, createVideoDto: CreateVideoDto) {
+  async CreateVideo(
+    file: Express.Multer.File,
+    createVideoDto: CreateVideoDto,
+    id: number,
+  ) {
+    const courseId = await this.courseRepository.findOneBy({ id });
+
+    if (!courseId) {
+      throw new NotFoundException();
+    }
+
     const video = await this.videoRepository.create({
       ...createVideoDto,
       videoUrl: file.filename,
+      course: courseId,
     });
 
     return this.videoRepository.save(video);

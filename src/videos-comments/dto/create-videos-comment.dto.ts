@@ -5,5 +5,4 @@ export class CreateVideosCommentDto {
   @IsString()
   description: string;
 
-  videos: Video;
 }

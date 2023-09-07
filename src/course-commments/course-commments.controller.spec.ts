@@ -11,7 +11,9 @@ describe('CourseCommmentsController', () => {
       providers: [CourseCommmentsService],
     }).compile();
 
-    controller = module.get<CourseCommmentsController>(CourseCommmentsController);
+    controller = module.get<CourseCommmentsController>(
+      CourseCommmentsController,
+    );
   });
 
   it('should be defined', () => {

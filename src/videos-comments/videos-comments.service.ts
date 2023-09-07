@@ -10,18 +10,33 @@ import { User } from 'src/auth/entities/User.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { VideosComment } from './entities/videos-comment.entity';
 import { Repository } from 'typeorm';
+import { Video } from 'src/videos/entities/videos.entity';
 
 @Injectable()
 export class VideosCommentsService {
   constructor(
     @InjectRepository(VideosComment)
     readonly videoCommentRepository: Repository<VideosComment>,
+
+    @InjectRepository(Video)
+    readonly videoRepository: Repository<Video>,
   ) {}
 
-  async create(createVideosCommentDto: CreateVideosCommentDto, user: User) {
+  async create(
+    createVideosCommentDto: CreateVideosCommentDto,
+    user: User,
+    id: number,
+  ) {
+    const videoId = await this.videoRepository.findOneBy({ id });
+
+    if (!videoId) {
+      throw new NotFoundException();
+    }
+
     const create = this.videoCommentRepository.create({
       ...createVideosCommentDto,
       user: user,
+      videos: videoId
     });
 
     const save = await this.videoCommentRepository.save(create);

@@ -9,5 +9,6 @@ import { Video } from '../videos/entities/videos.entity';
   imports: [TypeOrmModule.forFeature([Course])],
   controllers: [CoursesController],
   providers: [CoursesService],
+  exports: [TypeOrmModule.forFeature([Course])]
 })
 export class CoursesModule {}

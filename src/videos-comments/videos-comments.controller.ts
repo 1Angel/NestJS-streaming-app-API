@@ -20,12 +20,13 @@ export class VideosCommentsController {
   constructor(private readonly videosCommentsService: VideosCommentsService) {}
 
   @UseGuards(AuthGuard)
-  @Post('create')
+  @Post('create/:id')
   create(
     @Body() createVideosCommentDto: CreateVideosCommentDto,
     @GetUser() user: User,
+    @Param('id') id: number
   ) {
-    return this.videosCommentsService.create(createVideosCommentDto, user);
+    return this.videosCommentsService.create(createVideosCommentDto, user, id);
   }
 
   @Get()

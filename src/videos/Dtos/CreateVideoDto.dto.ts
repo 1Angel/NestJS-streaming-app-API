@@ -10,7 +10,5 @@ export class CreateVideoDto {
   @IsNotEmpty()
   description: string;
 
-  course: Course;
-
   videoUrl: string;
 }

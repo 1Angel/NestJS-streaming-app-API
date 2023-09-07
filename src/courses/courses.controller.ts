@@ -25,7 +25,6 @@ import { Role } from 'src/auth/entities/Roles.enum';
 export class CoursesController {
   constructor(private readonly coursesService: CoursesService) {}
 
-
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.Admin)
   @Post('create')
@@ -44,7 +43,7 @@ export class CoursesController {
     return this.coursesService.FindById(id);
   }
   @Get('all-titulo')
-  FindAlltile(
+  FindAlltitle(
     @Query() searchFilterDto: SearchFilterDto,
     @Query() paginationDto: PaginationDto,
   ) {

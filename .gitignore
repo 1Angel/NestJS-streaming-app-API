@@ -12,6 +12,10 @@ yarn-error.log*
 lerna-debug.log*
 
 .env
+.dockerignore
+
+Dockerfile
+
 
 # OS
 .DS_Store

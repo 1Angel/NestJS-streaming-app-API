@@ -22,12 +22,13 @@ export class CourseCommmentsController {
   ) {}
 
   @UseGuards(AuthGuard)
-  @Post('create')
+  @Post('create/:id')
   CreateComment(
+    @Param('id') id: number,
     @Body() createCourseCommentDto: CreateCourseCommentDto,
     @GetUser() user: User,
   ) {
-    return this.courseCommmentsService.Create(createCourseCommentDto, user);
+    return this.courseCommmentsService.Create(id, createCourseCommentDto, user);
   }
 
   @UseGuards(AuthGuard)

@@ -10,18 +10,32 @@ import { CourseComments } from './entities/Course-Comment.entity';
 import { Repository } from 'typeorm';
 import { User } from 'src/auth/entities/User.entity';
 import { EditCommentDto } from './Dtos/edit-courseComment.dto';
+import { Course } from 'src/courses/entity/Courses.entity';
 
 @Injectable()
 export class CourseCommmentsService {
   constructor(
     @InjectRepository(CourseComments)
     readonly courseCommentRepository: Repository<CourseComments>,
+
+    @InjectRepository(Course)
+    readonly courseRepository: Repository<Course>,
   ) {}
 
-  async Create(createCourseCommentDto: CreateCourseCommentDto, user: User) {
+  async Create(
+    id: number,
+    createCourseCommentDto: CreateCourseCommentDto,
+    user: User,
+  ) {
+    const courseid = await this.courseRepository.findOneBy({ id });
+    if (!courseid) {
+      throw new NotFoundException();
+    }
+
     const comments = await this.courseCommentRepository.create({
       ...createCourseCommentDto,
       user: user,
+      course: courseid,
     });
 
     const save = await this.courseCommentRepository.save(comments);

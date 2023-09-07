@@ -29,7 +29,7 @@ export class VideosController {
 
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.Admin)
-  @Post('upload')
+  @Post('upload/:id')
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
@@ -46,8 +46,9 @@ export class VideosController {
   uploadVideo(
     @UploadedFile() file: Express.Multer.File,
     @Body() createVideoDto: CreateVideoDto,
+    @Param('id') id: number
   ) {
-    return this.videosService.CreateVideo(file, createVideoDto);
+    return this.videosService.CreateVideo(file, createVideoDto, id);
   }
 
   @UseInterceptors(ClassSerializerInterceptor)
